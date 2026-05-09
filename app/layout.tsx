@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Poppins, Fjalla_One, Playwrite_CA } from "next/font/google";
+
 import "./globals.css";
+import { WagmiProvider } from "wagmi";
+import { config } from "@/config";
+import Providers from "./ReactQueryProvider/Providers";
 
 const poppins = Poppins({
   variable: "--poppins",
@@ -33,7 +37,11 @@ export default function RootLayout({
       lang="en"
       className={`${poppins.variable} ${fjallaOne.variable} ${playwrite.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Providers>
+          <WagmiProvider config={config}>{children}</WagmiProvider>
+        </Providers>
+      </body>
     </html>
   );
 }
