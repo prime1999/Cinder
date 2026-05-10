@@ -1,7 +1,7 @@
 "use client";
 
 // React hooks provide local state and side effects.
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 // Wagmi gives access to the connected wallet address.
 import { useAccount } from "wagmi";
 // Dialog primitives come from the shadcn UI layer.
