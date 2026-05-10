@@ -92,6 +92,7 @@ export async function GET(req: NextRequest) {
 
       return nftContractAddress.toLowerCase() === contractAddressLower;
     });
+    console.log({ ownedNfts });
 
     return NextResponse.json({
       nfts: filtered.map((nft) => ({

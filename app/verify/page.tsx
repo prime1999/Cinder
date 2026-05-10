@@ -1,7 +1,9 @@
-import { Suspense } from "react";
-import VerifyContent from "./verify-content";
+"use client";
 
-const VerifyPage = () => {
+import { Suspense } from "react";
+import VerifyContent from "@/components/verify-content";
+
+const Page = () => {
   return (
     <Suspense fallback={<VerifyContent loadingOnly />}>
       <VerifyContent />
@@ -9,4 +11,4 @@ const VerifyPage = () => {
   );
 };
 
-export default VerifyPage;
+export default Page;
