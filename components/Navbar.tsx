@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Bell } from "lucide-react";
 // wagmi imports: wallet helpers and types
 import type { Connector } from "wagmi";
@@ -14,7 +14,6 @@ import {
 // Chain metadata for Base Sepolia used when attempting network switch/add
 import { baseSepolia } from "wagmi/chains";
 // Utility to wait for a transaction receipt after submitting a tx
-import { waitForTransactionReceipt } from "wagmi/actions";
 // shadcn-imports
 import {
   Popover,
@@ -47,7 +46,6 @@ const Navbar = () => {
   } = useDisconnect();
   // Signing hook for ERC-2612 permit (EIP-712 typed data).
   const { signTypedDataAsync } = useSignTypedData();
-
   // Compact wallet label for the navbar button.
   const shortAddress = address
     ? `${address.slice(0, 6)}...${address.slice(-4)}`

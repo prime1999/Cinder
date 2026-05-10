@@ -7,6 +7,7 @@ import type {
   SearchEventsResponse,
   GenerateMetadataRequest,
   MetadataUploadResponse,
+  OwnedContractNftsResponse,
 } from "../types";
 
 /**
@@ -92,5 +93,28 @@ export const useGenerateMetadata = () => {
 
   return useMutation<MetadataUploadResponse, Error, GenerateMetadataRequest>({
     mutationFn: generateMetadataFn,
+  });
+};
+
+export const useOwnedContractNfts = (
+  address: string | undefined,
+  enabled: boolean,
+) => {
+  return useQuery<OwnedContractNftsResponse, Error>({
+    queryKey: ["owned-contract-nfts", address],
+    enabled: enabled && Boolean(address),
+    queryFn: async () => {
+      const searchParams = new URLSearchParams();
+      if (address) searchParams.set("address", address);
+
+      const res = await fetch(`/api/nfts?${searchParams.toString()}`);
+      const body = await res.json().catch(() => null);
+
+      if (!res.ok) {
+        throw new Error(body?.error ?? "Failed to load wallet NFTs");
+      }
+
+      return body as OwnedContractNftsResponse;
+    },
   });
 };

@@ -1,6 +1,7 @@
 import Image from "next/image";
 // UI-imports
 import Navbar from "@/components/Navbar";
+import GenerateCodeDialog from "@/components/GenerateCodeDialog";
 import Footer from "@/components/Footer";
 import TicketSheet from "@/components/TicketSheet";
 
@@ -34,9 +35,7 @@ const Page = () => {
 
             <div className="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <TicketSheet />
-              <button className="w-52 rounded-full bg-green-700/50 px-6 py-3 text-sm font-semibold text-green-950 backdrop-blur-sm transition duration-500 cursor-pointer hover:bg-green-700/35 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:text-base">
-                Generate code
-              </button>
+              <GenerateCodeDialog />
             </div>
             <Footer />
           </div>

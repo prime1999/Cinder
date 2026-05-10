@@ -102,3 +102,17 @@ export type MetadataUploadResponse = {
   tokenURI: string;
   ipfsHash: string;
 };
+
+export type OwnedContractNft = {
+  tokenId: string;
+  name: string;
+  contractAddress: string;
+  tokenType: string;
+  imageUrl: string;
+  tokenUri: string;
+};
+
+export type OwnedContractNftsResponse = {
+  nfts: OwnedContractNft[];
+  count: number;
+};
