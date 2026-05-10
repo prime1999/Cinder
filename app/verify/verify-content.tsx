@@ -1,8 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { recoverTypedDataAddress } from "viem";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 
 type VerifyContentProps = {
@@ -121,134 +124,169 @@ const VerifyContent = ({ loadingOnly = false }: VerifyContentProps) => {
   }
 
   return (
-    <div className="mx-auto max-w-2xl text-center text-green-800 font-poppins">
-      <p className="mb-4 inline-block rounded-full font-semibold font-playwrite border border-green-700/35 bg-green-700/10 px-4 py-2 text-[12px] tracking-[0.22em] backdrop-blur-sm">
-        {verifyStatus === "pending" && "LOADING ACCESS CODE"}
-        {verifyStatus === "verifying" && "VERIFYING SIGNATURE"}
-        {verifyStatus === "success" && "✓ VERIFIED"}
-        {verifyStatus === "error" && "✗ VERIFICATION FAILED"}
-      </p>
+    <main className="relative min-h-screen w-screen overflow-hidden">
+      <Image
+        src="/images/background.jpg"
+        alt="Background"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
+      />
 
-      <h1 className="text-3xl font-bold font-fjallaOne leading-tight sm:text-4xl md:text-5xl">
-        {verifyStatus === "pending" && "Loading Access Code"}
-        {verifyStatus === "verifying" && "Verifying Your Access Code..."}
-        {verifyStatus === "success" && "Access Code Verified"}
-        {verifyStatus === "error" && "Verification Failed"}
-      </h1>
+      <div className="absolute inset-0 bg-linear-to-b from-black/10 via-black/15 to-black/20" />
 
-      {verifyStatus === "success" && (
-        <div className="mt-8 space-y-4 text-left">
-          <p className="mx-auto max-w-xl text-base text-green-900">
-            Your access code has been successfully verified. Please present this
-            confirmation at the event entrance.
-          </p>
+      <section className="relative z-10 min-h-screen px-6 flex flex-col">
+        <Navbar />
 
-          <div className="mx-auto max-w-xl rounded-lg border border-green-700/35 bg-green-700/10 p-4 space-y-2 backdrop-blur-sm">
-            <div>
-              <span className="font-semibold text-green-800">Token ID:</span>{" "}
-              <span className="text-green-900">{tokenId}</span>
-            </div>
+        <div className="flex flex-1 items-center justify-center">
+          <div className="mx-auto max-w-2xl text-center text-green-800 font-poppins">
+            <p className="mb-4 inline-block rounded-full font-semibold font-playwrite border border-green-700/35 bg-green-700/10 px-4 py-2 text-[12px] tracking-[0.22em] backdrop-blur-sm">
+              {verifyStatus === "pending" && "LOADING ACCESS CODE"}
+              {verifyStatus === "verifying" && "VERIFYING SIGNATURE"}
+              {verifyStatus === "success" && "✓ VERIFIED"}
+              {verifyStatus === "error" && "✗ VERIFICATION FAILED"}
+            </p>
 
-            <div>
-              <span className="font-semibold text-green-800">Event ID:</span>{" "}
-              <span className="text-green-900">{eventId}</span>
-            </div>
+            <h1 className="text-3xl font-bold font-fjallaOne leading-tight sm:text-4xl md:text-5xl">
+              {verifyStatus === "pending" && "Loading Access Code"}
+              {verifyStatus === "verifying" && "Verifying Your Access Code..."}
+              {verifyStatus === "success" && "Access Code Verified"}
+              {verifyStatus === "error" && "Verification Failed"}
+            </h1>
 
-            <div>
-              <span className="font-semibold text-green-800">Issued At:</span>{" "}
-              <span className="text-green-900">
-                {issuedAt ? new Date(issuedAt).toLocaleString() : "Unknown"}
-              </span>
-            </div>
+            {verifyStatus === "success" && (
+              <div className="mt-8 space-y-4 text-left">
+                <p className="mx-auto max-w-xl text-base text-green-900">
+                  Your access code has been successfully verified. Please
+                  present this confirmation at the event entrance.
+                </p>
 
-            {recoveredAddress && (
-              <div>
-                <span className="font-semibold text-green-800">
-                  Verified By:
-                </span>{" "}
-                <span className="text-xs text-green-900 break-all">
-                  {recoveredAddress}
-                </span>
+                <div className="mx-auto max-w-xl rounded-lg border border-green-700/35 bg-green-700/10 p-4 space-y-2 backdrop-blur-sm">
+                  <div>
+                    <span className="font-semibold text-green-800">
+                      Token ID:
+                    </span>{" "}
+                    <span className="text-green-900">{tokenId}</span>
+                  </div>
+
+                  <div>
+                    <span className="font-semibold text-green-800">
+                      Event ID:
+                    </span>{" "}
+                    <span className="text-green-900">{eventId}</span>
+                  </div>
+
+                  <div>
+                    <span className="font-semibold text-green-800">
+                      Issued At:
+                    </span>{" "}
+                    <span className="text-green-900">
+                      {issuedAt
+                        ? new Date(issuedAt).toLocaleString()
+                        : "Unknown"}
+                    </span>
+                  </div>
+
+                  {recoveredAddress && (
+                    <div>
+                      <span className="font-semibold text-green-800">
+                        Verified By:
+                      </span>{" "}
+                      <span className="text-xs text-green-900 break-all">
+                        {recoveredAddress}
+                      </span>
+                    </div>
+                  )}
+
+                  {ticketInfo && (
+                    <>
+                      {ticketInfo.eventName && (
+                        <div>
+                          <span className="font-semibold text-green-800">
+                            Event:
+                          </span>{" "}
+                          <span className="text-green-900">
+                            {ticketInfo.eventName}
+                          </span>
+                        </div>
+                      )}
+                      {ticketInfo.used && (
+                        <div>
+                          <span className="font-semibold text-amber-700">
+                            Used At:
+                          </span>{" "}
+                          <span className="text-amber-900">
+                            {new Date(ticketInfo.usedAt).toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+
+                <p className="mx-auto max-w-xl text-sm text-green-700 font-semibold">
+                  ✓ Please allow this guest entry to the event.
+                </p>
               </div>
             )}
 
-            {ticketInfo && (
-              <>
-                {ticketInfo.eventName && (
-                  <div>
-                    <span className="font-semibold text-green-800">Event:</span>{" "}
-                    <span className="text-green-900">
-                      {ticketInfo.eventName}
-                    </span>
+            {verifyStatus === "error" && (
+              <div className="mt-8 space-y-4">
+                <p className="mx-auto max-w-xl text-base text-red-700">
+                  {errorMessage || "An unexpected error occurred."}
+                </p>
+
+                {(tokenId || eventId || issuedAt || signature) && (
+                  <div className="mx-auto max-w-xl rounded-lg border border-red-700/35 bg-red-700/10 p-4 space-y-2 backdrop-blur-sm text-left">
+                    <p className="text-xs font-semibold text-red-800">
+                      Debug Info:
+                    </p>
+                    {tokenId && (
+                      <p className="text-xs text-red-900 break-all">
+                        Token ID: {tokenId}
+                      </p>
+                    )}
+                    {eventId && (
+                      <p className="text-xs text-red-900 break-all">
+                        Event ID: {eventId}
+                      </p>
+                    )}
+                    {issuedAt && (
+                      <p className="text-xs text-red-900 break-all">
+                        Issued At: {issuedAt}
+                      </p>
+                    )}
                   </div>
                 )}
-                {ticketInfo.used && (
-                  <div>
-                    <span className="font-semibold text-amber-700">
-                      Used At:
-                    </span>{" "}
-                    <span className="text-amber-900">
-                      {new Date(ticketInfo.usedAt).toLocaleString()}
-                    </span>
-                  </div>
-                )}
-              </>
+
+                <Button
+                  onClick={() => (window.location.href = "/")}
+                  className="mt-4"
+                >
+                  Back to Home
+                </Button>
+              </div>
+            )}
+
+            {(verifyStatus === "pending" || verifyStatus === "verifying") && (
+              <div className="mt-8">
+                <p className="text-base text-green-900">
+                  {verifyStatus === "verifying"
+                    ? "Please wait while we verify your signature..."
+                    : "Loading your access code..."}
+                </p>
+                <div className="mt-4 flex justify-center">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-700/30 border-t-green-700" />
+                </div>
+              </div>
             )}
           </div>
-
-          <p className="mx-auto max-w-xl text-sm text-green-700 font-semibold">
-            ✓ Please allow this guest entry to the event.
-          </p>
         </div>
-      )}
 
-      {verifyStatus === "error" && (
-        <div className="mt-8 space-y-4">
-          <p className="mx-auto max-w-xl text-base text-red-700">
-            {errorMessage || "An unexpected error occurred."}
-          </p>
-
-          {(tokenId || eventId || issuedAt || signature) && (
-            <div className="mx-auto max-w-xl rounded-lg border border-red-700/35 bg-red-700/10 p-4 space-y-2 backdrop-blur-sm text-left">
-              <p className="text-xs font-semibold text-red-800">Debug Info:</p>
-              {tokenId && (
-                <p className="text-xs text-red-900 break-all">
-                  Token ID: {tokenId}
-                </p>
-              )}
-              {eventId && (
-                <p className="text-xs text-red-900 break-all">
-                  Event ID: {eventId}
-                </p>
-              )}
-              {issuedAt && (
-                <p className="text-xs text-red-900 break-all">
-                  Issued At: {issuedAt}
-                </p>
-              )}
-            </div>
-          )}
-
-          <Button onClick={() => (window.location.href = "/")} className="mt-4">
-            Back to Home
-          </Button>
-        </div>
-      )}
-
-      {(verifyStatus === "pending" || verifyStatus === "verifying") &&
-        !loadingOnly && (
-          <div className="mt-8">
-            <p className="text-base text-green-900">
-              {verifyStatus === "verifying"
-                ? "Please wait while we verify your signature..."
-                : "Loading your access code..."}
-            </p>
-            <div className="mt-4 flex justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-green-700/30 border-t-green-700" />
-            </div>
-          </div>
-        )}
-    </div>
+        <Footer />
+      </section>
+    </main>
   );
 };
 
