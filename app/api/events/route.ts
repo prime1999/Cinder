@@ -130,7 +130,6 @@ export async function POST(request: Request) {
       .single();
 
     if (ticketTypeError || !ticketTypeRow?.id) {
-      console.log({ ticketTypeError });
       return Response.json(
         {
           error:

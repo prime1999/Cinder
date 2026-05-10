@@ -22,7 +22,7 @@ export type CreateEventPayload = {
     name: string;
     price: string;
     maxSupply: string | null;
-    perks: string[];
+    perks: string;
   }>;
 };
 
@@ -39,7 +39,7 @@ export type SearchTicketType = {
   price: number;
   max_supply: number | null;
   minted_count: number;
-  perks: string[];
+  perks: string;
 };
 
 export type SearchEventResult = {
@@ -76,5 +76,29 @@ export type TicketTypeRow = {
   price: number;
   max_supply: number | null;
   minted_count: number;
-  perks: string[];
+  perks: string;
+};
+
+export type TokenMetadata = {
+  name: string;
+  description: string;
+  image?: string;
+  attributes: Array<{
+    trait_type: string;
+    value: string | number;
+  }>;
+  event_id: string | number;
+  ticket_type_id: string | number;
+  price: number;
+  issuer: string;
+};
+
+export type GenerateMetadataRequest = {
+  event: SearchEventResult;
+  ticketType: SearchTicketType;
+};
+
+export type MetadataUploadResponse = {
+  tokenURI: string;
+  ipfsHash: string;
 };

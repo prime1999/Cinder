@@ -129,3 +129,30 @@
     @apply font-sans;
   }
 }
+
+@layer utilities {
+  .scrollbar-green {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(22 163 74) rgb(220 252 231);
+  }
+
+  .scrollbar-green::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  .scrollbar-green::-webkit-scrollbar-track {
+    background: rgb(220 252 231);
+    border-radius: 9999px;
+  }
+
+  .scrollbar-green::-webkit-scrollbar-thumb {
+    background: rgb(22 163 74);
+    border-radius: 9999px;
+    border: 2px solid rgb(220 252 231);
+  }
+
+  .scrollbar-green::-webkit-scrollbar-thumb:hover {
+    background: rgb(21 128 61);
+  }
+}

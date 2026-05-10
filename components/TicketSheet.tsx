@@ -95,10 +95,7 @@ const TicketSheet = () => {
         name: t.name,
         price: t.price,
         maxSupply: t.maxSupply || null,
-        perks: t.perks
-          .split(",")
-          .map((p) => p.trim())
-          .filter(Boolean),
+        perks: t.perks,
       })),
     };
 

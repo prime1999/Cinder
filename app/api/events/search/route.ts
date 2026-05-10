@@ -12,12 +12,14 @@ export async function GET(request: Request) {
   const supabase = getSupabaseAdminClient();
 
   let query = supabase
-    .from("CINDER_Events_Schema")
+    .from("CINDER_Event_Schema")
     .select(
       "id, organizer_wallet, title, description, location, start_date, max_supply, minted_count",
     )
     .order("start_date", { ascending: true })
     .limit(30);
+
+  console.log({ query });
 
   if (title) {
     query = query.ilike("title", `%${title}%`);
@@ -46,8 +48,9 @@ export async function GET(request: Request) {
   }
 
   const { data: events, error: eventError } = await query;
-
+  console.log({ events, eventError });
   if (eventError) {
+    console.log({ eventError });
     return Response.json({ error: eventError.message }, { status: 500 });
   }
 

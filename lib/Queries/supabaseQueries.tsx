@@ -5,6 +5,8 @@ import type {
   CreateEventPayload,
   SearchEventFilters,
   SearchEventsResponse,
+  GenerateMetadataRequest,
+  MetadataUploadResponse,
 } from "../types";
 
 /**
@@ -42,6 +44,7 @@ export const useSearchEvents = (
   filters: SearchEventFilters,
   enabled: boolean,
 ) => {
+  console.log({ filters });
   return useQuery<SearchEventsResponse, Error>({
     queryKey: [
       "search-events",
@@ -59,6 +62,7 @@ export const useSearchEvents = (
 
       const res = await fetch(`/api/events/search?${searchParams.toString()}`);
       const body = await res.json().catch(() => null);
+      console.log({ res, body });
 
       if (!res.ok) {
         throw new Error(body?.error ?? "Failed to search events");
@@ -66,5 +70,27 @@ export const useSearchEvents = (
 
       return body as SearchEventsResponse;
     },
+  });
+};
+
+export const useGenerateMetadata = () => {
+  const generateMetadataFn = async (payload: GenerateMetadataRequest) => {
+    const res = await fetch("/api/tickets/metadata", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const body = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      throw new Error(body?.error ?? "Failed to generate metadata");
+    }
+
+    return body as MetadataUploadResponse;
+  };
+
+  return useMutation<MetadataUploadResponse, Error, GenerateMetadataRequest>({
+    mutationFn: generateMetadataFn,
   });
 };
