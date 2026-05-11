@@ -415,59 +415,71 @@ const EventSearchDialog = ({ buttonClassName }: EventSearchDialogProps) => {
 
                   <div className="mt-4 max-h-64 overflow-y-auto pr-2 scrollbar-green">
                     <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                      {event.ticket_types.map((ticket) => (
-                        <div
-                          key={ticket.id}
-                          className="rounded-xl border border-border bg-muted/20 p-3"
-                        >
-                          <div className="flex items-center justify-between gap-3">
-                            <div className="flex items-center gap-2">
-                              <Ticket className="h-4 w-4 text-green-700" />
-                              <h4 className="font-medium text-foreground">
-                                {ticket.name}
-                              </h4>
-                            </div>
-                            <span className="text-xs font-semibold text-green-800">
-                              {formatAvailability(
-                                ticket.max_supply,
-                                ticket.minted_count,
-                              )}
-                            </span>
-                          </div>
-                          <p className="mt-2 text-sm text-muted-foreground">
-                            Price: {ticket.price} • Sold: {ticket.minted_count}
-                          </p>
+                      {event.ticket_types.map((ticket) => {
+                        const isSoldOut =
+                          ticket.max_supply !== null &&
+                          ticket.max_supply - ticket.minted_count <= 0;
+                        const activePurchaseResult =
+                          purchaseResult?.ticketId === ticket.id
+                            ? purchaseResult
+                            : null;
 
-                          <p className="mt-2 text-xs text-muted-foreground">
-                            Perks: {ticket.perks}
-                          </p>
-                          <button
-                            onClick={() => handleBuyTicket(event, ticket)}
-                            disabled={
-                              isGeneratingMetadata ||
-                              purchasingTicketId === ticket.id
-                            }
-                            className="mt-4 rounded-full px-4 py-2 font-poppins font-semibold text-xs bg-green-700 text-white cursor-pointer hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        return (
+                          <div
+                            key={ticket.id}
+                            className="rounded-xl border border-border bg-muted/20 p-3"
                           >
-                            {purchasingTicketId === ticket.id &&
-                            isGeneratingMetadata ? (
-                              <>
-                                <Loader2 className="h-3 w-3 animate-spin" />
-                                Processing...
-                              </>
-                            ) : (
-                              "Buy Ticket"
-                            )}
-                          </button>
-
-                          {purchaseError && failedTicketId === ticket.id && (
-                            <div className="mt-3 rounded-lg border border-red-700/20 bg-red-700/10 px-3 py-2 text-sm text-red-900">
-                              {purchaseError}
+                            <div className="flex items-center justify-between gap-3">
+                              <div className="flex items-center gap-2">
+                                <Ticket className="h-4 w-4 text-green-700" />
+                                <h4 className="font-medium text-foreground">
+                                  {ticket.name}
+                                </h4>
+                              </div>
+                              <span className="text-xs font-semibold text-green-800">
+                                {formatAvailability(
+                                  ticket.max_supply,
+                                  ticket.minted_count,
+                                )}
+                              </span>
                             </div>
-                          )}
+                            <p className="mt-2 text-sm text-muted-foreground">
+                              Price: {ticket.price} • Sold:{" "}
+                              {ticket.minted_count}
+                            </p>
 
-                          {purchaseResult &&
-                            purchaseResult.ticketId === ticket.id && (
+                            <p className="mt-2 text-xs text-muted-foreground">
+                              Perks: {ticket.perks}
+                            </p>
+                            <button
+                              onClick={() => handleBuyTicket(event, ticket)}
+                              disabled={
+                                isSoldOut ||
+                                isGeneratingMetadata ||
+                                purchasingTicketId === ticket.id
+                              }
+                              className="mt-4 rounded-full px-4 py-2 font-poppins font-semibold text-xs bg-green-700 text-white cursor-pointer hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            >
+                              {purchasingTicketId === ticket.id &&
+                              isGeneratingMetadata ? (
+                                <>
+                                  <Loader2 className="h-3 w-3 animate-spin" />
+                                  Processing...
+                                </>
+                              ) : isSoldOut ? (
+                                "Sold Out"
+                              ) : (
+                                "Buy Ticket"
+                              )}
+                            </button>
+
+                            {purchaseError && failedTicketId === ticket.id && (
+                              <div className="mt-3 rounded-lg border border-red-700/20 bg-red-700/10 px-3 py-2 text-sm text-red-900">
+                                {purchaseError}
+                              </div>
+                            )}
+
+                            {activePurchaseResult && (
                               <div className="mt-3 rounded-lg border border-green-700/20 bg-green-700/10 px-3 py-3 flex items-start gap-2">
                                 <CheckCircle className="h-5 w-5 mt-0.5 shrink-0 text-green-700" />
                                 <div className="min-w-0 flex-1 space-y-1.5">
@@ -475,12 +487,12 @@ const EventSearchDialog = ({ buttonClassName }: EventSearchDialogProps) => {
                                     ✓ Ticket minted successfully!
                                   </p>
                                   <div className="text-xs text-green-800 space-y-1">
-                                    {purchaseResult.ticketId && (
+                                    {activePurchaseResult.ticketId && (
                                       <p>
                                         <span className="font-medium">
                                           Token ID:
                                         </span>{" "}
-                                        {purchaseResult.ticketId}
+                                        {activePurchaseResult.ticketId}
                                       </p>
                                     )}
                                     <p>
@@ -488,26 +500,32 @@ const EventSearchDialog = ({ buttonClassName }: EventSearchDialogProps) => {
                                         Tx Hash:
                                       </span>{" "}
                                       <span className="font-mono truncate">
-                                        {purchaseResult.txHash.slice(0, 16)}...
-                                        {purchaseResult.txHash.slice(-8)}
+                                        {activePurchaseResult.txHash.slice(
+                                          0,
+                                          16,
+                                        )}
+                                        ...
+                                        {activePurchaseResult.txHash.slice(-8)}
                                       </span>
                                     </p>
-                                    <p className="break-words">
+                                    <p className="wrap-break-word">
                                       <span className="font-medium">
                                         Token URI:
                                       </span>{" "}
                                       <span className="font-mono text-xs">
-                                        {purchaseResult.tokenURI.length > 50
-                                          ? `${purchaseResult.tokenURI.slice(0, 50)}...`
-                                          : purchaseResult.tokenURI}
+                                        {activePurchaseResult.tokenURI.length >
+                                        50
+                                          ? `${activePurchaseResult.tokenURI.slice(0, 50)}...`
+                                          : activePurchaseResult.tokenURI}
                                       </span>
                                     </p>
                                   </div>
                                 </div>
                               </div>
                             )}
-                        </div>
-                      ))}
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

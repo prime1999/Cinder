@@ -193,20 +193,18 @@ const Navbar = () => {
 
   return (
     <nav className="w-full md:w-10/12 lg:w-7/12 mx-auto p-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col md:flex-row items-center justify-between">
         <h1 className="text-3xl font-bold text-green-950 font-fjallaOne tracking-widest">
           Cinder
         </h1>
-        <div className="flex items-center gap-4">
-          <div className="hidden lg:flex items-center gap-4">
+        <div className="max-sm:w-full max-sm:mt-4 flex items-center justify-center max-sm:gap-12 gap-4">
+          <div className="flex items-center max-sm:gap-12 gap-4">
             <EventSearchDialog buttonClassName="inline-flex" />
             <button>
               <Bell fill="green" stroke="green" size={20} />
             </button>
           </div>
-          <button className="lg:hidden">
-            <Bell fill="green" stroke="green" size={20} />
-          </button>
+
           {/* for the wallet connection */}
           <Popover
             open={isWalletPopoverOpen}
@@ -217,7 +215,7 @@ const Navbar = () => {
                 type="button"
                 onClick={handleWalletButtonClick}
                 disabled={isPending || isDisconnecting}
-                className="hidden lg:block w-32 xl:w-36 bg-green-800 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer text-white text-xs font-poppins p-2 rounded-md truncate"
+                className="w-24 lg:w-32 xl:w-36 bg-green-800 hover:bg-green-700 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer text-white text-xs font-poppins p-2 rounded-md truncate"
               >
                 {isConnected
                   ? shortAddress
@@ -289,11 +287,10 @@ const Navbar = () => {
           </Popover>
         </div>
       </div>
-
-      {/* For mobile view */}
+      {/* For mobile view
       <div className="mt-4 flex w-full justify-center lg:hidden">
         <EventSearchDialog buttonClassName="mt-0" />
-      </div>
+      </div> */}
     </nav>
   );
 };

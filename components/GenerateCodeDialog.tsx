@@ -273,7 +273,7 @@ const GenerateCodeDialog = () => {
           </button>
         </DialogTrigger>
 
-        <DialogContent>
+        <DialogContent className="max-h-[85vh] max-w-3xl overflow-hidden">
           <DialogHeader>
             <DialogTitle>Generate Access Code</DialogTitle>
 
@@ -282,7 +282,7 @@ const GenerateCodeDialog = () => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="py-3">
+          <div className="py-3 max-h-[60vh] overflow-y-auto pr-2 scrollbar-green">
             {isLoading || loadingMeta ? (
               <div className="flex items-center gap-2 text-sm">
                 <Loader2 className="h-4 w-4 animate-spin" /> Loading tickets...
@@ -350,7 +350,7 @@ const GenerateCodeDialog = () => {
       </Dialog>
 
       <Dialog open={qrPreviewOpen} onOpenChange={setQrPreviewOpen}>
-        <DialogContent>
+        <DialogContent className="max-h-[85vh] max-w-md overflow-hidden">
           <DialogHeader>
             <DialogTitle>Access QR Code</DialogTitle>
             <DialogDescription>
