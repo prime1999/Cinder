@@ -9,13 +9,11 @@ export const config = createConfig({
   // Support both default Sepolia and Base Sepolia networks.
   chains: [sepolia, baseSepolia],
   // Allow injected wallets and Coinbase Wallet connector.
-  connectors: [injected(), coinbaseWallet({ appName: "Crelo-Loan" })],
+  connectors: [injected(), coinbaseWallet({ appName: "Cinder" })],
   transports: {
     // Default RPC for Sepolia.
     [sepolia.id]: http(),
     // Explicit RPC for Base Sepolia used by contract interactions.
-    [baseSepolia.id]: http(
-      "https://base-sepolia.g.alchemy.com/v2/m_5pGtsiLUo492z_p9LbQ",
-    ),
+    [baseSepolia.id]: http(process.env.NEXT_PUBLIC_RPC_URL),
   },
 });

@@ -5,7 +5,7 @@ import { Bell } from "lucide-react";
 // wagmi imports: wallet helpers and types
 import type { Connector } from "wagmi";
 import {
-  useAccount,
+  useConnection,
   useChainId,
   useConnect,
   useDisconnect,
@@ -33,7 +33,7 @@ const Navbar = () => {
 
   // Wagmi hooks provide current wallet session and connector actions.
   // Current connected wallet address and connection boolean.
-  const { address, isConnected } = useAccount();
+  const { address, isConnected } = useConnection();
   // Active chain id used to route backend analysis to matching network.
   const chainId = useChainId();
   // Connector operations and loading state for wallet connection.
@@ -57,6 +57,7 @@ const Navbar = () => {
    * - disconnects an existing session first for a clean switch
    */
   const handleConnectorSelect = async (connector: Connector) => {
+    console.log("Selected connector:", connector.name);
     // Prevent overlapping connect/disconnect actions.
     if (isPending || isDisconnecting) return;
     // Connection flow can be rejected by the user, so keep it in try/catch.
